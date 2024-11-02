@@ -1,0 +1,11 @@
+# Binaries
+*.exe
+*.out
+runsync
+
+# Temporary files
+*~
+*.tmp
+
+# Vendor directory (if using vendoring)
+vendor/
