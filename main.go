@@ -14,7 +14,7 @@ import (
 
 // Run a Go file in the current directory
 func runGoFile() {
-	cmd := exec.Command("go", "run", ".")
+    cmd := exec.Command("sh", "-c", "go run .")
 	output, err := cmd.Output()
 	if err != nil {
 		color.Red("error executing command: %s", err)
