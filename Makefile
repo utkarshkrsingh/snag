@@ -1,5 +1,5 @@
 SOURCE_DIR := .
-BINARY_NAME := runsync
+BINARY_NAME := snag
 TARGET_DIR := /usr/bin
 PKG_DEPENDENCIES := github.com/fatih/color github.com/fsnotify/fsnotify
 
