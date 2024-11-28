@@ -1,4 +1,4 @@
-module github.com/utkarshkrsingh/runsync
+module github.com/utkarshkrsingh/snag
 
 go 1.23.2
 
