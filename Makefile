@@ -1,26 +1,25 @@
-SOURCE_DIR := .
+SOURCE_DIR := ./cmd/snag/
 BINARY_NAME := snag
-TARGET_DIR := /usr/bin
-PKG_DEPENDENCIES := github.com/fatih/color github.com/fsnotify/fsnotify
+TARGET_DIR := ./bin
+PKG_DEPENDENCIES := github.com/fsnotify/fsnotify github.com/spf13/cobra github.com/spf13/viper
 
-all: build
-
-build: deps
-	@go build -o $(SOURCE_DIR)/$(BINARY_NAME) .
+all: deps build run
 
 deps:
-	@go mod tidy
+	## Downloading all package dependencies
 	@go get $(PKG_DEPENDENCIES)
+	@go mod tidy
 
-install:
-	@mkdir -p $(TARGET_DIR)
-	@cp $(SOURCE_DIR)/$(BINARY_NAME) $(TARGET_DIR)
-	@chmod +x $(TARGET_DIR)/$(BINARY_NAME)
+build:
+	## Building the binary
+	@go build -o $(TARGET_DIR)/$(BINARY_NAME) $(SOURCE_DIR)
+
+run:
+	## Running the binary
+	./bin/snag
 
 clean:
-	@$(RM) -f $(BINARY_NAME)
-
-uninstall:
+	## Clearing binary
 	@$(RM) -f $(TARGET_DIR)/$(BINARY_NAME)
 
-.PHONY: all build deps install clean uninstall
+.PHONY: all deps build run clean
