@@ -1,14 +1,14 @@
 SOURCE_DIR := ./cmd/snag/
 BINARY_NAME := snag
 TARGET_DIR := ./bin
-PKG_DEPENDENCIES := github.com/fsnotify/fsnotify github.com/spf13/cobra github.com/spf13/viper
+PKG_DEPENDENCIES := github.com/fatih/color github.com/fsnotify/fsnotify github.com/spf13/cobra github.com/spf13/viper
 
 all: deps build run
 
 deps:
 	## Downloading all package dependencies
-	@go get $(PKG_DEPENDENCIES)
 	@go mod tidy
+	@go get $(PKG_DEPENDENCIES)
 
 build:
 	## Building the binary
