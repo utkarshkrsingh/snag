@@ -1,4 +1,4 @@
-module github.com/utkarhskrsingh.snag
+module github.com/utkarhskrsingh/snag
 
 go 1.25.4
 

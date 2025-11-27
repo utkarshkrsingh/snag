@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
-	"github.com/utkarhskrsingh.snag/internal/color"
+	"github.com/utkarhskrsingh/snag/internal/color"
 )
 
 var watchCmd = &cobra.Command{

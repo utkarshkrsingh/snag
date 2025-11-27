@@ -1,16 +1,18 @@
 package main
 
 import (
-	"log"
+	"github.com/utkarhskrsingh/snag/internal/logger"
 )
 
 func init() {
+	Logger = logger.NewConsoleUI(false)
+
 	// Remove auto-generated completion command
 	rootCmd.CompletionOptions.DisableDefaultCmd = true
 }
 
 func main() {
 	if err := rootCmd.Execute(); err != nil {
-		log.Fatalf("[ERR]: %v\n", err)
+		Logger.Fatal("Failed to start snag", err)
 	}
 }
