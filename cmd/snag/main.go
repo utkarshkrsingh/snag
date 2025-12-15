@@ -5,9 +5,8 @@ import (
 )
 
 func init() {
-	Logger = logger.NewConsoleUI(false)
+	Logger = logger.NewConsoleUI()
 
-	// Remove auto-generated completion command
 	rootCmd.CompletionOptions.DisableDefaultCmd = true
 }
 
