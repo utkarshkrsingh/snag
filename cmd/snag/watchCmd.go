@@ -6,6 +6,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// initWatchCmd registers the 'watch' subcommand with the root command.
 func (app *application) initWatchCmd() {
 	app.watchCmd = &cobra.Command{
 		Use:   "watch",
@@ -20,7 +21,7 @@ passed as an argument.`,
 	app.rootCmd.AddCommand(app.watchCmd)
 }
 
-// watchFunc executes the 'watch' subcommand
+// watchFunc handles execution of the 'watch' subcommand.
 func (app *application) watchFunc(cmd *cobra.Command, args []string) {
 	for _, dir := range args {
 		if !strings.HasSuffix(dir, "/") {

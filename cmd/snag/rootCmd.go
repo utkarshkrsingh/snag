@@ -4,6 +4,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// initRootCmd configures the root Cobra command for the application.
 func (app *application) initRootCmd() {
 	app.rootCmd = &cobra.Command{
 		Use:   "snag",

@@ -2,6 +2,7 @@ package main
 
 import "github.com/spf13/cobra"
 
+// initRunCmd registers the 'run' subcommand with the root command.
 func (app *application) initRunCmd() {
 	app.runCmd = &cobra.Command{
 		Use:   "run",
@@ -13,7 +14,7 @@ func (app *application) initRunCmd() {
 	app.rootCmd.AddCommand(app.runCmd)
 }
 
-// runFunc executes the 'run' subcommand
+// runFunc handles execution of the 'run' subcommand.
 func (app *application) runFunc(cmd *cobra.Command, args []string) {
 	app.logger.Info("run flag is used")
 }

@@ -6,6 +6,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// initConfigCmd registers the 'config' subcommand with the root command.
 func (app *application) initConfigCmd() {
 	app.configCmd = &cobra.Command{
 		Use:   "config",
@@ -23,7 +24,7 @@ developer.`,
 	app.rootCmd.AddCommand(app.configCmd)
 }
 
-// configFunc executes 'config' subcommand
+// configFunc handles execution of the 'config' subcommand.
 func (app *application) configFunc(cmd *cobra.Command, args []string) {
 	initFlag, err := cmd.Flags().GetBool("init")
 	if err != nil {
