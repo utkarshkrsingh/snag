@@ -2,19 +2,18 @@ package main
 
 import "github.com/spf13/cobra"
 
-// runCmd is the 'run' subcommand
-var runCmd = &cobra.Command{
-	Use:   "run",
-	Short: "Runs the script",
-	Long:  "Runs the script once.",
-	Run:   runFunc,
-}
+func (app *application) initRunCmd() {
+	app.runCmd = &cobra.Command{
+		Use:   "run",
+		Short: "Run the script",
+		Long:  "Run the script once",
+		Run:   app.runFunc,
+	}
 
-func init() {
-	rootCmd.AddCommand(runCmd)
+	app.rootCmd.AddCommand(app.runCmd)
 }
 
 // runFunc executes the 'run' subcommand
-func runFunc(cmd *cobra.Command, args []string) {
-	Logger.Info("run flag is used")
+func (app *application) runFunc(cmd *cobra.Command, args []string) {
+	app.logger.Info("run flag is used")
 }

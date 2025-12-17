@@ -1,17 +1,36 @@
 package main
 
 import (
+	"github.com/spf13/cobra"
 	"github.com/utkarhskrsingh/snag/internal/logger"
 )
 
-func init() {
-	Logger = logger.NewConsoleUI()
-
-	rootCmd.CompletionOptions.DisableDefaultCmd = true
+type application struct {
+	logger    *logger.ConsoleUI
+	rootCmd   *cobra.Command
+	configCmd *cobra.Command
+	watchCmd  *cobra.Command
+	runCmd    *cobra.Command
 }
 
 func main() {
-	if err := rootCmd.Execute(); err != nil {
-		Logger.Fatal("Failed to start snag", err)
+
+	app := newApplication()
+
+	if err := app.rootCmd.Execute(); err != nil {
+		app.logger.Fatal("Failed to start snag", err)
 	}
+}
+
+func newApplication() *application {
+	app := &application{
+		logger: logger.NewConsoleUI(),
+	}
+
+	app.initRootCmd()
+	app.initConfigCmd()
+	app.initWatchCmd()
+	app.initRunCmd()
+
+	return app
 }

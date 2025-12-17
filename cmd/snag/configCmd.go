@@ -6,52 +6,52 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// configCmd is the 'config' subcommand
-var configCmd = &cobra.Command{
-	Use:   "config",
-	Short: "Config file generation",
-	Long: `Config commands generate a dummy config
+func (app *application) initConfigCmd() {
+	app.configCmd = &cobra.Command{
+		Use:   "config",
+		Short: "Config file generation",
+		Long: `Config commands generate a dummy config
 that can be updated for the project further by the
 developer.`,
 
-	Run: configFunc,
-}
+		Run: app.configFunc,
+	}
 
-func init() {
-	configCmd.Flags().BoolP("init", "i", false, "Create a dummy config and then update according to your need.")
-	configCmd.Flags().BoolP("check", "c", false, "Check whether the current config follows the expected format.")
-	rootCmd.AddCommand(configCmd)
+	app.configCmd.Flags().BoolP("init", "i", false, "Create a dummy config and then udate according to your need")
+	app.configCmd.Flags().BoolP("check", "c", false, "Check whether the current config follows the expected format")
+
+	app.rootCmd.AddCommand(app.configCmd)
 }
 
 // configFunc executes 'config' subcommand
-func configFunc(cmd *cobra.Command, args []string) {
+func (app *application) configFunc(cmd *cobra.Command, args []string) {
 	initFlag, err := cmd.Flags().GetBool("init")
 	if err != nil {
-		Logger.Fatal("Unable to read flags", err)
+		app.logger.Fatal("Unable to read flags", err)
 	}
 
 	checkFlag, err := cmd.Flags().GetBool("check")
 	if err != nil {
-		Logger.Fatal("Unable to read flags", err)
+		app.logger.Fatal("Unable to read flags", err)
 	}
 
 	if !initFlag && !checkFlag {
-		Logger.Info("No flags provided. Use --help for available options.")
+		app.logger.Info("No flags provided. Use --help for available options.")
 	}
 
 	if initFlag {
-		initConfig()
+		app.initConfig()
 	}
 
 	if checkFlag {
-		checkConfig()
+		app.checkConfig()
 	}
 }
 
-func initConfig() {
+func (app *application) initConfig() {
 	fmt.Println("init flag is used")
 }
 
-func checkConfig() {
+func (app *application) checkConfig() {
 	fmt.Println("check flag is used")
 }
