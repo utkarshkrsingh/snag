@@ -16,7 +16,7 @@ func (app *application) initConfigCmd() {
 that can be updated for the project further by the
 developer.`,
 
-		Run: app.configFunc,
+		RunE: app.configFunc,
 	}
 
 	app.configCmd.Flags().BoolP("init", "i", false, "Create a dummy config and then udate according to your need")
@@ -26,17 +26,17 @@ developer.`,
 }
 
 // configFunc handles execution of the 'config' subcommand.
-func (app *application) configFunc(cmd *cobra.Command, args []string) {
+func (app *application) configFunc(cmd *cobra.Command, args []string) error {
 	initFlag, err := cmd.Flags().GetBool("init")
 	if err != nil {
 		app.logger.Error("Unable to read flags", err)
-		os.Exit(1)
+		return err
 	}
 
 	checkFlag, err := cmd.Flags().GetBool("check")
 	if err != nil {
 		app.logger.Error("Unable to read flags", err)
-		os.Exit(1)
+		return err
 	}
 
 	if !initFlag && !checkFlag {
@@ -50,6 +50,8 @@ func (app *application) configFunc(cmd *cobra.Command, args []string) {
 	if checkFlag {
 		app.checkConfig()
 	}
+
+	return nil
 }
 
 func (app *application) initConfig() {
