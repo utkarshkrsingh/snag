@@ -13,21 +13,28 @@ var (
 	errorColor   = color.New(color.FgRed)
 )
 
-type ConsoleUI struct {
-	logger  *slog.Logger
-	verbose bool
+type Logger interface {
+	Info(msg string)
+	Error(msg string, err error)
+	Debug(msg string, args ...any)
 }
 
-func NewConsoleUI() *ConsoleUI {
-	opts := &slog.HandlerOptions{
-		Level: slog.LevelDebug,
+type ConsoleUI struct {
+	logger *slog.Logger
+}
+
+func NewConsoleUI(verbose bool) *ConsoleUI {
+	level := slog.LevelInfo
+	if verbose {
+		level = slog.LevelDebug
 	}
 
-	logger := slog.New(slog.NewTextHandler(os.Stderr, opts))
+	opts := &slog.HandlerOptions{
+		Level: level,
+	}
 
 	return &ConsoleUI{
-		logger:  logger,
-		verbose: false,
+		logger: slog.New(slog.NewTextHandler(os.Stderr, opts)),
 	}
 }
 
@@ -35,29 +42,14 @@ func (c *ConsoleUI) Success(msg string) {
 	successColor.Println("✔ ", msg)
 }
 
-func (c *ConsoleUI) Error(msg string, err error) {
-	errorColor.Printf("✘ %s: %v\n", msg, err)
-}
-
 func (c *ConsoleUI) Info(msg string) {
 	fmt.Println("•", msg)
 }
 
-func (c *ConsoleUI) Debug(msg string, keyAndValue ...any) {
-	if !c.verbose {
-		return
-	}
-
-	c.logger.Debug(msg, keyAndValue...)
-}
-
-func (c *ConsoleUI) Fatal(msg string, err error) {
+func (c *ConsoleUI) Error(msg string, err error) {
 	errorColor.Printf("✘ %s: %v\n", msg, err)
-	os.Exit(-1)
 }
 
-func (c *ConsoleUI) SetVerbose(verbose bool) {
-	if !c.verbose {
-		c.verbose = true
-	}
+func (c *ConsoleUI) Debug(msg string, args ...any) {
+	c.logger.Debug(msg, args...)
 }

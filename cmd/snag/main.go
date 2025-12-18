@@ -1,12 +1,15 @@
 package main
 
 import (
+	"os"
+
 	"github.com/spf13/cobra"
 	"github.com/utkarhskrsingh/snag/internal/logger"
 )
 
 type application struct {
-	logger    *logger.ConsoleUI
+	logger    logger.Logger
+	verbose   bool
 	rootCmd   *cobra.Command
 	configCmd *cobra.Command
 	watchCmd  *cobra.Command
@@ -14,19 +17,20 @@ type application struct {
 }
 
 func main() {
-
 	app := newApplication()
 
+	app.rootCmd.PersistentPreRun = func(cmd *cobra.Command, args []string) {
+		app.logger = logger.NewConsoleUI(app.verbose)
+	}
+
 	if err := app.rootCmd.Execute(); err != nil {
-		app.logger.Fatal("Failed to start snag", err)
+		app.logger.Error("Failed to start snag", err)
+		os.Exit(1)
 	}
 }
 
 func newApplication() *application {
-	app := &application{
-		logger: logger.NewConsoleUI(),
-	}
-
+	app := &application{}
 	app.initRootCmd()
 	app.initConfigCmd()
 	app.initWatchCmd()

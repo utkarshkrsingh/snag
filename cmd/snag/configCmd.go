@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/spf13/cobra"
 )
@@ -28,12 +29,14 @@ developer.`,
 func (app *application) configFunc(cmd *cobra.Command, args []string) {
 	initFlag, err := cmd.Flags().GetBool("init")
 	if err != nil {
-		app.logger.Fatal("Unable to read flags", err)
+		app.logger.Error("Unable to read flags", err)
+		os.Exit(1)
 	}
 
 	checkFlag, err := cmd.Flags().GetBool("check")
 	if err != nil {
-		app.logger.Fatal("Unable to read flags", err)
+		app.logger.Error("Unable to read flags", err)
+		os.Exit(1)
 	}
 
 	if !initFlag && !checkFlag {

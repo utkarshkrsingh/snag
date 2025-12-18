@@ -14,5 +14,13 @@ There is no need to manually build and run the application
 after every modification.`,
 	}
 
+	app.rootCmd.PersistentFlags().BoolVarP(
+		&app.verbose,
+		"verbose",
+		"v",
+		false,
+		"enable verbose logging",
+	)
+
 	app.rootCmd.CompletionOptions.DisableDefaultCmd = true
 }
