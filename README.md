@@ -1,3 +1,3 @@
 <p align=center>
-    Snag - Watch, Compile, and Run Your Code Instantly
+    snag - watch, compile and run your code instantly
 </p>
