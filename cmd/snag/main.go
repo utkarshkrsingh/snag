@@ -4,26 +4,18 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
-	"github.com/utkarhskrsingh/snag/internal/config"
 	"github.com/utkarhskrsingh/snag/internal/logger"
 )
 
 type application struct {
-	logger        logger.Logger
-	verbose       bool
-	rootCmd       *cobra.Command
-	configCmd     *cobra.Command
-	watchCmd      *cobra.Command
-	runCmd        *cobra.Command
-	configManager config.ConfigManager
+	logger  logger.Logger
+	rootCmd *cobra.Command
+	verbose bool
 }
 
 func main() {
-
-	cfgMgr := config.NewConfigManager()
 	logger := logger.NewConsoleUI(false)
-
-	app := newApplication(logger, cfgMgr)
+	app := newApplication(logger)
 
 	if err := app.rootCmd.Execute(); err != nil {
 		app.logger.Error("Failed to start snag", err)
@@ -31,20 +23,17 @@ func main() {
 	}
 }
 
-func newApplication(logger logger.Logger, cfgMgr config.ConfigManager) *application {
+func newApplication(log logger.Logger) *application {
 	app := &application{
-		logger:        logger,
-		configManager: cfgMgr,
+		logger: log,
 	}
-	app.configManager = config.NewConfigManager()
 
-	app.rootCmd.PersistentPreRun = func(cmd *cobra.Command, args []string) {
-		app.logger = logger.NewConsoleUI(app.verbose)
-	}
-	app.initRootCmd()
-	app.initConfigCmd()
-	app.initWatchCmd()
-	app.initRunCmd()
+	root := newRootCmd(app)
+	root.AddCommand(
+		initConfigCmd(app),
+	)
+
+	app.rootCmd = root
 
 	return app
 }

@@ -17,6 +17,7 @@ type Logger interface {
 	Info(msg string)
 	Error(msg string, err error)
 	Debug(msg string, args ...any)
+	Success(msg string)
 }
 
 type ConsoleUI struct {
@@ -38,10 +39,6 @@ func NewConsoleUI(verbose bool) *ConsoleUI {
 	}
 }
 
-func (c *ConsoleUI) Success(msg string) {
-	successColor.Println("✔ ", msg)
-}
-
 func (c *ConsoleUI) Info(msg string) {
 	fmt.Println("•", msg)
 }
@@ -52,4 +49,8 @@ func (c *ConsoleUI) Error(msg string, err error) {
 
 func (c *ConsoleUI) Debug(msg string, args ...any) {
 	c.logger.Debug(msg, args...)
+}
+
+func (c *ConsoleUI) Success(msg string) {
+	successColor.Println("✔ ", msg)
 }
