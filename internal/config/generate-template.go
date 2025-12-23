@@ -1,4 +1,6 @@
-# --- Global Settings ---
+package config
+
+const template = `# --- Global Settings ---
 debounce: 500ms
 env:
     - APP_ENV: "development" # development | staging | production
@@ -27,3 +29,4 @@ pipelines:
     - name: "Run Python"
       extensions: [".py"]
       command: "python main.py"
+`

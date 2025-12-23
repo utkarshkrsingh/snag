@@ -1,6 +1,9 @@
 package main
 
 import (
+	"fmt"
+	"os"
+
 	"github.com/spf13/cobra"
 	"github.com/utkarhskrsingh/snag/internal/logger"
 )
@@ -22,9 +25,25 @@ after every modification.`,
 		"enable verbose logging",
 	)
 
-	rootCmd.PersistentPreRun = func(cmd *cobra.Command, args []string) {
+	rootCmd.PersistentPreRunE = func(cmd *cobra.Command, args []string) error {
 		app.logger = logger.NewConsoleUI(app.verbose)
-		app.logger.Info("verbose mode is enabled")
+		if app.verbose {
+			app.logger.Info("verbose mode is enabled")
+		}
+
+		cwd, err := os.Getwd()
+		if err != nil {
+			return err
+		}
+
+		if err := app.cfgMgr.LoadConfig(cwd); err != nil && cmd.Name() != "config" {
+			return fmt.Errorf(
+				"snag.yaml not found or invalid (run `snag config`): %w",
+				err,
+			)
+		}
+
+		return nil
 	}
 
 	rootCmd.CompletionOptions.DisableDefaultCmd = true

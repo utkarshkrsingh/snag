@@ -1,6 +1,10 @@
 package main
 
-import "github.com/spf13/cobra"
+import (
+	"os"
+
+	"github.com/spf13/cobra"
+)
 
 func initConfigCmd(app *application) *cobra.Command {
 	configCmd := &cobra.Command{
@@ -11,7 +15,13 @@ that can be updated for the project further by the
 developer.`,
 
 		RunE: func(cmd *cobra.Command, args []string) error {
-			app.logger.Info("Generating config ")
+			cwd, err := os.Getwd()
+			if err != nil {
+				return err
+			}
+			if err := app.cfgMgr.GenerateConfig(cwd); err != nil {
+				return err
+			}
 			return nil
 		},
 	}
