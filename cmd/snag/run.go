@@ -17,11 +17,10 @@ will be executed.`,
 	snag run test`,
 
 		RunE: func(cmd *cobra.Command, args []string) error {
-			if len(args) == 0 {
-				app.ui.Info("runs the whole script once")
-				return nil
+			if err := app.configMgr.Load(); err != nil {
+				return err
 			}
-			app.ui.Info("Running command: " + args[0])
+			app.ui.Info("config loaded")
 			return nil
 		},
 	}

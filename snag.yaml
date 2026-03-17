@@ -1,0 +1,26 @@
+global:
+    debounce: 500ms
+    ignore:
+        - .git
+        - vendor
+        - node_modules
+
+watch:
+    - name: server
+      patterns:
+          - "**/*.go"
+      restart: true
+      run: go run main.go
+      env:
+          PORT: "8080"
+          ENV: development
+
+    - name: build
+      patterns:
+          - "**/*.go"
+      run: go build ./...
+
+    - name: lint
+      patterns:
+          - "**/*.go"
+      run: golangci-lint run

@@ -1,38 +1,65 @@
 package main
 
 import (
-	"strings"
+	"bytes"
+	"io"
+	"os"
+	"path/filepath"
 	"testing"
+
+	"github.com/utkarshkrsingh/snag/internal/config"
+	"github.com/utkarshkrsingh/snag/internal/ui"
 )
 
 func TestRunCmd(t *testing.T) {
+	tempDir := t.TempDir()
+	configPath := filepath.Join(tempDir, "snag.yaml")
+
+	dummyConfig := `
+global:
+    debounce: 500ms
+watch:
+    - name: test_task
+      patterns: ["**/*.go"]
+      run: echo "hello test"
+`
+
+	err := os.WriteFile(configPath, []byte(dummyConfig), 0644)
+	if err != nil {
+		t.Fatalf("Failed to write temp config: %v", err)
+	}
+
 	tests := []struct {
-		name     string
-		args     []string
-		expected string
+		name string
+		args []string
 	}{
 		{
-			name:     "run without args",
-			args:     []string{"run"},
-			expected: "runs the whole script once",
+			name: "run_without_args",
+			args: []string{},
 		},
 		{
-			name: "run with args",
-			args: []string{"run", "build"},
+			name: "run_with_args",
+			args: []string{"test_task"},
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			app := newApplication()
+			app.configMgr = *config.New(configPath)
 
-			out, err := executeCommand(app.rootCmd, tt.args...)
+			app.ui = ui.New(io.Discard)
+
+			cmd := newRunCmd(app)
+			cmd.SetArgs(tt.args)
+
+			cmd.SetOut(new(bytes.Buffer))
+			cmd.SetErr(new(bytes.Buffer))
+
+			err := cmd.Execute()
+
 			if err != nil {
-				t.Fatalf("unexpected error: %v", err)
-			}
-
-			if !strings.Contains(out, tt.expected) {
-				t.Fatalf("unexpected output, got: %v expected: %v", out, tt.expected)
+				t.Errorf("unexpected error: %v", err)
 			}
 		})
 	}
