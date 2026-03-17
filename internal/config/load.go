@@ -34,5 +34,11 @@ func (cfgMgr *ConfigMgr) Load() error {
 		return fmt.Errorf("invalid yaml format: %w", err)
 	}
 
+	cfgMgr.Config.ApplyDefaults()
+
+	if err := cfgMgr.Config.Validate(); err != nil {
+		return fmt.Errorf("configuration validation failed: %w", err)
+	}
+
 	return nil
 }
